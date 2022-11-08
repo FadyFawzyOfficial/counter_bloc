@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc/counter_bloc.dart';
 
 void main() => runApp(const MyApp());
 
@@ -8,11 +11,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Counter Bloc',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MyHomePage(),
+    return BlocProvider<CounterBloc>(
+      create: (context) => CounterBloc(),
+      child: MaterialApp(
+        title: 'Counter Bloc',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: const MyHomePage(),
+      ),
     );
   }
 }
