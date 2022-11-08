@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/counter_bloc.dart';
+import 'other_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -30,7 +31,24 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: BlocBuilder<CounterBloc, CounterState>(
+        child: BlocConsumer<CounterBloc, CounterState>(
+          listener: (context, state) {
+            if (state.counter == 3) {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  content: Text('counter is ${state.counter}'),
+                ),
+              );
+            } else if (state.counter == -1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const OtherScreen(),
+                ),
+              );
+            }
+          },
           builder: (context, state) {
             return Text(
               '${state.counter}',
@@ -43,15 +61,15 @@ class MyHomePage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           FloatingActionButton(
-            onPressed: () =>
-                context.read<CounterBloc>().add(IncrementCounterEvent()),
+            onPressed: () => BlocProvider.of<CounterBloc>(context)
+                .add(DecrementCounterEvent()),
             heroTag: 'decrement',
             child: const Icon(Icons.remove_rounded),
           ),
           const SizedBox(height: 16),
           FloatingActionButton(
-            onPressed: () => BlocProvider.of<CounterBloc>(context)
-                .add(DecrementCounterEvent()),
+            onPressed: () =>
+                context.read<CounterBloc>().add(IncrementCounterEvent()),
             heroTag: 'increment',
             child: const Icon(Icons.add_rounded),
           ),
