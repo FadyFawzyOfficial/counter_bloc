@@ -29,23 +29,29 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(
-        child: Text(
-          '0',
-          style: TextStyle(fontSize: 100),
+      body: Center(
+        child: BlocBuilder<CounterBloc, CounterState>(
+          builder: (context, state) {
+            return Text(
+              '${state.counter}',
+              style: const TextStyle(fontSize: 100),
+            );
+          },
         ),
       ),
       floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           FloatingActionButton(
-            onPressed: () {},
+            onPressed: () =>
+                context.read<CounterBloc>().add(IncrementCounterEvent()),
             heroTag: 'decrement',
             child: const Icon(Icons.remove_rounded),
           ),
           const SizedBox(height: 16),
           FloatingActionButton(
-            onPressed: () {},
+            onPressed: () => BlocProvider.of<CounterBloc>(context)
+                .add(DecrementCounterEvent()),
             heroTag: 'increment',
             child: const Icon(Icons.add_rounded),
           ),
